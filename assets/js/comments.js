@@ -135,6 +135,71 @@ const data = {
 }
 
 const content = document.querySelector('.content');
+const newCommentArea = document.querySelector('.comment-enter');
+const sendBtn = document.querySelector('.sendBtn');
+
+function handleAddComments() {
+  const newCommentText = commentEnter.value.trim();
+  if (newCommentText !== '') {
+    // Yeni yorum elemanını oluştur
+    const newCommentDiv = document.createElement('div');
+    newCommentDiv.classList.add('comment');
+    newCommentDiv.innerHTML = `
+      <div class="comment-user-info">
+        <img src="assets/img/image-juliusomo.png" alt="Juliu Somo Avatar">
+        <h2>juliusomo</h2>
+        <span>you</span>
+        <span>just now</span>
+      </div>
+      <div class="comment-text">
+        <p>${newCommentText}</p>
+      </div>
+      <div class="btn-area">
+        <button class="deleteBtn">
+          <img src="assets/img/delete-btn-icon.svg" alt="Delete Button Icon">
+          <span>Delete</span>
+        </button>
+        <button class="editBtn">
+          <img src="assets/img/edit-btn-icon.svg" alt="Edit Button Icon">
+          <span>Edit</span>
+        </button>
+      </div>
+    `;
+
+    // Yeni yorumu content'in sonuna ekle
+    content.appendChild(newCommentDiv);
+
+    // Yorum alanını temizle
+    commentEnter.value = '';
+  } else {
+    alert('Empty comments cannot be added.');
+  }
+
+  const deleteBtns = document.querySelectorAll('.deleteBtn');
+
+  for (let index = 0; index < deleteBtns.length; index++) {
+    const deleteBtn = deleteBtns[index];
+    deleteBtn.addEventListener('click', removeComment);
+    function removeComment() {
+      if (confirm('Are you sure you want to delete this comment? This will remove the comment and can’t be undone.')) {
+        this.parentElement.parentElement.remove();
+      }
+    }
+    break;
+  }
+
+  // for (const deleteBtn of deleteBtns) {
+  //   deleteBtn.addEventListener('click', removeComment);
+  //   function removeComment() {
+  //     if (confirm('Are you sure you want to delete this comment? This will remove the comment and can’t be undone.')) {
+  //       this.parentElement.parentElement.remove();
+  //     }
+  //   }
+  // }
+}
+
+sendBtn.addEventListener('click', handleAddComments);
+
 
 function renderPost() {
   const comments = data.comments;
@@ -143,17 +208,11 @@ function renderPost() {
     return `
       <div class="card">
         <div class="user-info">
-          <img src="assets/img/${comment.user.image.png.split('/').pop()}" alt="">
+          <img src="assets/img/${comment.user.image.png.split('/').pop()}" alt="User Avatar">
           <h2>${comment.user.username}</h2>
           <span>${comment.createdAt}</span>
         </div>
         <p>${comment.content}</p>
-        <!-- Sayaç bölümü -->
-        <div class="counter">
-          <button class="decrease" onclick="updateScore(${comment.id}, -1)">-</button>
-          <span id="score-${comment.id}">${comment.score}</span>
-          <button class="increase" onclick="updateScore(${comment.id}, 1)">+</button>
-        </div>
       </div>
       <div class="replies-container">
           ${renderReplies(comment.replies)}
@@ -170,17 +229,11 @@ function renderReplies(replies) {
       return `
         <div class="reply-card">
           <div class="user-info">
-            <img src="assets/img/${reply.user.image.png.split('/').pop()}" alt="">
+            <img src="assets/img/${reply.user.image.png.split('/').pop()}" alt="User Avatar">
             <h2>${reply.user.username}</h2>
             <span>${reply.createdAt}</span>
           </div>
           <p>${reply.content}</p>
-         <!-- Sayaç bölümü -->
-          <div class="counter">
-            <button class="decrease" onclick="updateScore(${reply.id}, -1)">-</button>
-            <span id="score-${reply.id}">${reply.score}</span>
-            <button class="increase" onclick="updateScore(${reply.id}, 1)">+</button>
-          </div>
         </div>
       `;
     }).join('');
@@ -189,3 +242,4 @@ function renderReplies(replies) {
 }
 
 renderPost();
+

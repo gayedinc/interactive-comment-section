@@ -74,6 +74,20 @@ a {
   gap: 16px;
 }
 
+.comment-enter {
+  max-width: 343px;
+  margin-inline: auto;
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  padding: 16px 16px 13px;
+  margin-top: 16px;
+}
+
+.comment-enter input {
+  border: 1px solid #E9EBF0;
+  max-width: 311px;
+}
+
 .replies-container {
   margin-left: 16px;
   padding-left: 16px;
@@ -86,7 +100,7 @@ a {
   padding: 16px;
 }
 
-.card p, .reply-card p{
+.card p, .reply-card p {
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
@@ -112,4 +126,9 @@ a {
   font-weight: 400;
   line-height: 24px;
   color: #67727E;
+}
+
+.comment-enter-bottom {
+  display: flex;
+  justify-content: space-between;
 }
