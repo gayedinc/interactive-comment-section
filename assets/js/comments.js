@@ -138,28 +138,52 @@ const content = document.querySelector('.content');
 
 function renderPost() {
   const comments = data.comments;
-  content.innerHTML = comments.map((comment) => `
-    <div class="card">
-      <h2>User Name: ${comment.user.username}</h2>
-      <span>Created At: ${comment.createdAt}</span>
-      <p>Comment: ${comment.content}</p>
-      <div class="replies-container">
-        ${renderReplies(comment.replies)} 
+  content.innerHTML = comments.map((comment) => {
+    // yorum için card oluşturuyoruz
+    return `
+      <div class="card">
+        <div class="user-info">
+          <img src="assets/img/${comment.user.image.png.split('/').pop()}" alt="">
+          <h2>${comment.user.username}</h2>
+          <span>${comment.createdAt}</span>
+        </div>
+        <p>${comment.content}</p>
+        <!-- Sayaç bölümü -->
+        <div class="counter">
+          <button class="decrease" onclick="updateScore(${comment.id}, -1)">-</button>
+          <span id="score-${comment.id}">${comment.score}</span>
+          <button class="increase" onclick="updateScore(${comment.id}, 1)">+</button>
+        </div>
       </div>
-    </div>
-  `).join('');
+      <div class="replies-container">
+          ${renderReplies(comment.replies)}
+      </div>
+    `;
+  }).join('');
 }
 
 function renderReplies(replies) {
-  // replies dizisi boş değilse, her bir cevabı işleyip HTML'e ekliyoruz
+  // replies dizisi varsa her bir cevabı işleyip HTML'e ekliyoruz
   if (replies.length > 0) {
-    return replies.map((reply) => `
-      <div class="reply">
-        <h3>Reply by: ${reply.user.username}</h3>
-        <span>Created At: ${reply.createdAt}</span>
-        <p>Comment: ${reply.content}</p>
-      </div>
-    `).join('');
+    return replies.map((reply) => {
+      // her reply için ayrı bir card div'i oluşturuyoruz
+      return `
+        <div class="reply-card">
+          <div class="user-info">
+            <img src="assets/img/${reply.user.image.png.split('/').pop()}" alt="">
+            <h2>${reply.user.username}</h2>
+            <span>${reply.createdAt}</span>
+          </div>
+          <p>${reply.content}</p>
+         <!-- Sayaç bölümü -->
+          <div class="counter">
+            <button class="decrease" onclick="updateScore(${reply.id}, -1)">-</button>
+            <span id="score-${reply.id}">${reply.score}</span>
+            <button class="increase" onclick="updateScore(${reply.id}, 1)">+</button>
+          </div>
+        </div>
+      `;
+    }).join('');
   }
   return ''; // replies dizisi boşsa hiçbir şey render etmiyoruz
 }
